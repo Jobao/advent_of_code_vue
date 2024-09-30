@@ -1,3 +1,5 @@
+import { md5 } from "js-md5";
+
 interface Solutions {
 	[year: string]: {
 		[day: string]: { run: (input: string | string[]) => string[]; transformInput: (input: string | string[]) => string | string[] };
@@ -138,6 +140,38 @@ export const solutions: Solutions = {
 				return result;
 			},
 			transformInput(input: string | string[]) {
+				return input as string;
+			},
+		},
+		"4": {
+			run: (input: string | string[]) => {
+				let result: string[] = [];
+				let hashed = "";
+				let leadingZerosPT1 = 5;
+				let leadingZerosPT2 = 6;
+				let currentNonce = 0;
+				let part1Found = false;
+				let part2Found = false;
+				hashed = md5(input + currentNonce.toString());
+				while (part1Found === false || part2Found === false) {
+					currentNonce++;
+					hashed = md5(input + currentNonce.toString());
+					if (!part1Found) {
+						if (hashed.substring(0, leadingZerosPT1) === "00000") {
+							result.push("Part 1: " + currentNonce.toString());
+							part1Found = true;
+						}
+					}
+					if (!part2Found) {
+						if (hashed.substring(0, leadingZerosPT2) === "000000") {
+							result.push("Part 2: " + currentNonce.toString());
+							part2Found = true;
+						}
+					}
+				}
+				return result;
+			},
+			transformInput: (input: string | string[]) => {
 				return input as string;
 			},
 		},
