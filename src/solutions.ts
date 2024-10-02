@@ -231,5 +231,71 @@ export const solutions: Solutions = {
 				return (input as string).split("\n");
 			},
 		},
+		"6": {
+			run: (input: string | string[]) => {
+				let brightness = 0;
+				let result: string[] = [];
+				const turnOn = (x: number, y: number) => {
+					light[x][y].state = true;
+					light[x][y].brightness++;
+				};
+				const turnOff = (x: number, y: number) => {
+					light[x][y].state = false;
+					light[x][y].brightness--;
+					if (light[x][y].brightness < 0) {
+						light[x][y].brightness = 0;
+					}
+				};
+				const toggle = (x: number, y: number) => {
+					light[x][y].state = !light[x][y].state;
+					light[x][y].brightness += 2;
+				};
+				let light = Array.from(Array(1000), () => Array.from(Array(1000), () => ({ state: false, brightness: 0 })));
+				for (const line of input) {
+					const words = line.split(" ");
+					if (words[0] === "turn") {
+						const [from_x, from_y] = words[2].split(",").map(Number);
+						const [to_x, to_y] = words[4].split(",").map(Number);
+						if (words[1] === "on") {
+							for (let x = from_x; x <= to_x; x++) {
+								for (let y = from_y; y <= to_y; y++) {
+									turnOn(x, y);
+								}
+							}
+						} else {
+							for (let x = from_x; x <= to_x; x++) {
+								for (let y = from_y; y <= to_y; y++) {
+									turnOff(x, y);
+								}
+							}
+						}
+					} else {
+						const [from_x, from_y] = words[1].split(",").map(Number);
+						const [to_x, to_y] = words[3].split(",").map(Number);
+						for (let x = from_x; x <= to_x; x++) {
+							for (let y = from_y; y <= to_y; y++) {
+								toggle(x, y);
+							}
+						}
+					}
+				}
+
+				let part1 = 0;
+				for (let x = 0; x < 1000; x++) {
+					for (let y = 0; y < 1000; y++) {
+						if (light[x][y].state) {
+							part1++;
+						}
+						brightness += light[x][y].brightness;
+					}
+				}
+				result.push("Part 1: " + part1.toString());
+				result.push("Part 2: " + brightness.toString());
+				return result;
+			},
+			transformInput: (input: string | string[]) => {
+				return (input as string).split("\n");
+			},
+		},
 	},
 };

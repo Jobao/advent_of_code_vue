@@ -31,7 +31,6 @@ const day = ref(route.params.day as string)
 const exist = ref(false)
 const input = defineModel<string | string[]>('input', {default: ''})
 const result = ref<string[]>([])
-let method: Function;
 
 function solve(){
     result.value = []
@@ -42,8 +41,6 @@ function solve(){
     
     
     let ret =run.run(run.transformInput(input.value))
-    //let ret =run.run((input.value as string).split('\n'))
-    //ret = run.transformInput(input.value)
     for(const r of ret){
         result.value.push(r)
     }
