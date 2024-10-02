@@ -1,8 +1,16 @@
 import { md5 } from "js-md5";
+import Ui_2015_01 from "./components/2015/ui_2015_01.vue";
+import type { Component } from "vue";
+import Ui_2015_02 from "./components/2015/ui_2015_02.vue";
+import Ui_2015_03 from "./components/2015/ui_2015_03.vue";
+import Ui_2015_04 from "./components/2015/ui_2015_04.vue";
+import Ui_2015_05 from "./components/2015/ui_2015_05.vue";
+import Ui_2015_06 from "./components/2015/ui_2015_06.vue";
+import Ui_2015_07 from "./components/2015/ui_2015_07.vue";
 
-interface Solutions {
+export interface Solutions {
 	[year: string]: {
-		[day: string]: { run: (input: string | string[]) => string[]; transformInput: (input: string | string[]) => string | string[] };
+		[day: string]: { run: (input: string | string[]) => string[]; transformInput: (input: string | string[]) => string | string[]; title: string; description: string; urlToAOC: string; uiComponent: Component };
 	};
 }
 
@@ -29,11 +37,16 @@ export const solutions: Solutions = {
 					currentPosition++;
 				}
 				result.push("Part 1: " + currentFloor.toString());
+
 				return result;
 			},
 			transformInput: (input: string | string[]) => {
 				return input as string;
 			},
+			title: "Not Quite Lisp",
+			description: "Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.",
+			urlToAOC: "https://adventofcode.com/2015/day/1",
+			uiComponent: Ui_2015_01,
 		},
 		"2": {
 			run: (input: string | string[]) => {
@@ -58,6 +71,10 @@ export const solutions: Solutions = {
 			transformInput: (input: string | string[]) => {
 				return (input as string).split("\n");
 			},
+			title: "I Was Told There Would Be No Math",
+			description: "The elves are running low on wrapping paper, and so they need to submit an order for more.",
+			urlToAOC: "https://adventofcode.com/2015/day/2",
+			uiComponent: Ui_2015_02,
 		},
 		"3": {
 			run: (input: string | string[]) => {
@@ -142,6 +159,10 @@ export const solutions: Solutions = {
 			transformInput(input: string | string[]) {
 				return input as string;
 			},
+			title: "Perfectly Spherical Houses in a Vacuum",
+			description: "Santa is delivering presents to an infinite two-dimensional grid of houses.",
+			urlToAOC: "https://adventofcode.com/2015/day/3",
+			uiComponent: Ui_2015_03,
 		},
 		"4": {
 			run: (input: string | string[]) => {
@@ -174,6 +195,10 @@ export const solutions: Solutions = {
 			transformInput: (input: string | string[]) => {
 				return input as string;
 			},
+			title: "The Ideal Stocking Stuffer",
+			description: "Santa needs help mining some AdventCoins (very similar to bitcoins) to use as gifts for all the economically forward-thinking little girls and boys.",
+			urlToAOC: "https://adventofcode.com/2015/day/4",
+			uiComponent: Ui_2015_04,
 		},
 		"5": {
 			run: (input: string | string[]) => {
@@ -230,6 +255,10 @@ export const solutions: Solutions = {
 			transformInput: (input: string | string[]) => {
 				return (input as string).split("\n");
 			},
+			title: "Doesn't He Have Intern-Elves For This?",
+			description: "Santa needs help figuring out which strings in his text file are naughty or nice.",
+			urlToAOC: "https://adventofcode.com/2015/day/5",
+			uiComponent: Ui_2015_05,
 		},
 		"6": {
 			run: (input: string | string[]) => {
@@ -296,6 +325,23 @@ export const solutions: Solutions = {
 			transformInput: (input: string | string[]) => {
 				return (input as string).split("\n");
 			},
+			title: "Probably a Fire Hazard",
+			description: "Because your neighbors keep defeating you in the holiday house decorating contest year after year, you've decided to deploy one million lights in a 1000x1000 grid.",
+			urlToAOC: "https://adventofcode.com/2015/day/6",
+			uiComponent: Ui_2015_06,
+		},
+		"7": {
+			run: (input: string | string[]) => {
+				let result: string[] = [];
+				return result;
+			},
+			transformInput: (input: string | string[]) => {
+				return (input as string).split("\n");
+			},
+			title: "Some Assembly Required",
+			description: "This year, Santa brought little Bobby Tables a set of wires and bitwise logic gates! Unfortunately, little Bobby is a little under the recommended age range, and he needs help assembling the circuit.",
+			urlToAOC: "https://adventofcode.com/2015/day/7",
+			uiComponent: Ui_2015_07,
 		},
 	},
 };
