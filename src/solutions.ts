@@ -175,5 +175,61 @@ export const solutions: Solutions = {
 				return input as string;
 			},
 		},
+		"5": {
+			run: (input: string | string[]) => {
+				let result: string[] = [];
+				let nicePart1 = 0;
+				let nicePart2 = 0;
+				const vowels = ["a", "e", "i", "o", "u"];
+				const forbiddenStrings = ["ab", "cd", "pq", "xy"];
+				const requiredVowelsForNice = 3;
+				const part1 = (line: string) => {
+					let forbidden = line.includes(forbiddenStrings[0]) || line.includes(forbiddenStrings[1]) || line.includes(forbiddenStrings[2]) || line.includes(forbiddenStrings[3]);
+					if (forbidden) {
+						return;
+					}
+					let vowelsCount = 0;
+					for (const c of line) {
+						if (vowels.includes(c)) {
+							vowelsCount++;
+						}
+					}
+					if (vowelsCount < requiredVowelsForNice) {
+						return;
+					}
+					let repeat = false;
+					for (let index = 0; index < line.length; index++) {
+						const c = line[index];
+						if (index + 1 !== line.length) {
+							if (c === line[index + 1]) {
+								repeat = true;
+							}
+						}
+					}
+					if (!repeat) {
+						return;
+					}
+					nicePart1++;
+				};
+				const part2 = (line: string) => {
+					nicePart2 += line.split("\n").filter((line) => {
+						const appearsTwice = Array.from({ length: line.length - 1 }).some((_, i) => line.indexOf(line.slice(i, i + 2), i + 2) >= 0);
+						const repeats = Array.from({ length: line.length - 2 }).some((_, i) => line[i] === line[i + 2]);
+						return appearsTwice && repeats;
+					}).length;
+				};
+				let tot = 0;
+				for (const line of input) {
+					part1(line);
+					part2(line);
+				}
+				result.push("Part 1: " + nicePart1.toString());
+				result.push("Part 2: " + nicePart2.toString());
+				return result;
+			},
+			transformInput: (input: string | string[]) => {
+				return (input as string).split("\n");
+			},
+		},
 	},
 };
