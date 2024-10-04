@@ -333,6 +333,135 @@ export const solutions: Solutions = {
 		"7": {
 			run: (input: string | string[]) => {
 				let result: string[] = [];
+				const isNumber = (v: string): boolean => {
+					return !Number.isNaN(Number.parseInt(v));
+				};
+				const uint16Converter = (n: number) => {
+					const max = 65536;
+					const min = 0;
+					if (n > max) {
+						return n - max;
+					}
+
+					if (n < min) {
+						return n + max;
+					}
+					return n;
+				};
+				const processAssignament = (input: string, destination: string) => {
+					let val = 0;
+
+					if (isNumber(input)) {
+						val = parseInt(input);
+					} else {
+						let wire = wires.get(input);
+						if (wire === undefined) {
+							return false;
+						} else {
+							val = wire;
+						}
+					}
+					wires.set(destination, val);
+
+					return true;
+				};
+
+				const processNot = (input: string, destination: string) => {
+					let val = 0;
+					if (isNumber(input)) {
+						val = parseInt(input);
+					} else {
+						let wire = wires.get(input);
+						if (wire === undefined) {
+							return false;
+						} else {
+							val = wire;
+						}
+					}
+					wires.set(destination, uint16Converter(~val));
+					return true;
+				};
+
+				const processGate = (input1: string, input2: string, destination: string, gate: string) => {
+					let v1 = 0;
+					let v2 = 0;
+					if (isNumber(input1)) {
+						v1 = parseInt(input1);
+					} else {
+						let wire = wires.get(input1);
+						if (wire === undefined) {
+							return false;
+						} else {
+							v1 = wire;
+						}
+					}
+
+					if (isNumber(input2)) {
+						v2 = parseInt(input2);
+					} else {
+						let wire = wires.get(input2);
+						if (wire === undefined) {
+							return false;
+						} else {
+							v2 = wire;
+						}
+					}
+					if (gate === "AND") {
+						wires.set(destination, uint16Converter(v1 & v2));
+					} else if (gate === "OR") {
+						wires.set(destination, uint16Converter(v1 | v2));
+					} else if (gate === "LSHIFT") {
+						wires.set(destination, uint16Converter(v1 << v2));
+					} else if (gate === "RSHIFT") {
+						wires.set(destination, uint16Converter(v1 >> v2));
+					}
+					return true;
+				};
+				const processInstruction = (instruction: string): boolean => {
+					const words = instruction.split(" ");
+					if (words.length === 3) {
+						return processAssignament(words[0], words[2]);
+					}
+					if (words[0] === "NOT") {
+						return processNot(words[1], words[3]);
+					} else if (words.includes("AND") || words.includes("OR") || words.includes("LSHIFT") || words.includes("RSHIFT")) {
+						return processGate(words[0], words[2], words[4], words[1]);
+					}
+					return false;
+				};
+				let wires: Map<string, number> = new Map();
+				let instructions: string[] = [];
+				for (const line of input) {
+					instructions.push(line);
+				}
+				while (instructions.length > 0) {
+					let currentInstruction = instructions.shift();
+					if (currentInstruction !== undefined) {
+						if (!processInstruction(currentInstruction)) {
+							instructions.push(currentInstruction);
+						}
+					}
+				}
+				let signalA = wires.get("a");
+				result.push("Part 1: " + wires.get("a"));
+				wires.clear();
+
+				wires.set("b", signalA ?? 0);
+				instructions = [];
+				for (const line of input) {
+					if (line === "14146 -> b") continue;
+					instructions.push(line);
+				}
+				while (instructions.length > 0) {
+					let currentInstruction = instructions.shift();
+					if (currentInstruction !== undefined) {
+						if (!processInstruction(currentInstruction)) {
+							instructions.push(currentInstruction);
+						}
+					}
+				}
+				result.push("Part 2: " + wires.get("a"));
+
 				return result;
 			},
 			transformInput: (input: string | string[]) => {
