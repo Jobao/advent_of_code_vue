@@ -7,6 +7,8 @@ import Ui_2015_04 from "./components/2015/ui_2015_04.vue";
 import Ui_2015_05 from "./components/2015/ui_2015_05.vue";
 import Ui_2015_06 from "./components/2015/ui_2015_06.vue";
 import Ui_2015_07 from "./components/2015/ui_2015_07.vue";
+import Ui_2015_08 from "./components/2015/ui_2015_08.vue";
+import { isNumber } from "./utils";
 
 export interface Solutions {
 	[year: string]: {
@@ -333,9 +335,7 @@ export const solutions: Solutions = {
 		"7": {
 			run: (input: string | string[]) => {
 				let result: string[] = [];
-				const isNumber = (v: string): boolean => {
-					return !Number.isNaN(Number.parseInt(v));
-				};
+
 				const uint16Converter = (n: number) => {
 					const max = 65536;
 					const min = 0;
@@ -471,6 +471,52 @@ export const solutions: Solutions = {
 			description: "This year, Santa brought little Bobby Tables a set of wires and bitwise logic gates! Unfortunately, little Bobby is a little under the recommended age range, and he needs help assembling the circuit.",
 			urlToAOC: "https://adventofcode.com/2015/day/7",
 			uiComponent: Ui_2015_07,
+		},
+		"8": {
+			run: (input: string | string[]) => {
+				let result: string[] = [];
+				let linesOfCOdeB = 0;
+				let linesOfCode = 0;
+				let totalMemory = 0;
+				for (const line of input) {
+					linesOfCode += line.length;
+					linesOfCOdeB += JSON.stringify(line).length;
+					let currentmemory = 0;
+					let currentChar = 0;
+					while (currentChar < line.length) {
+						if (line[currentChar] === "\\") {
+							if (line[currentChar + 1] === "x") {
+								/*if (isNumber(line.substring(currentChar + 2, currentChar + 4))) {
+									currentChar += 4;
+								} else {
+									currentChar++;
+								}*/
+								currentChar += 4;
+							} else if (line[currentChar + 1] === "\\") {
+								currentChar += 2;
+							} else if (line[currentChar + 1] === '"') {
+								currentChar += 2;
+							} else {
+								currentChar++;
+							}
+						} else {
+							currentChar++;
+						}
+						currentmemory++;
+					}
+					totalMemory += currentmemory - 2; //por las dos comillas
+				}
+				result.push("Part 1: " + (linesOfCode - totalMemory).toString());
+				result.push("Part 2: " + (linesOfCOdeB - linesOfCode).toString());
+				return result;
+			},
+			transformInput: (input: string | string[]) => {
+				return (input as string).split("\n");
+			},
+			title: "Matchsticks ",
+			description: "Space on the sleigh is limited this year, and so Santa will be bringing his list as a digital copy. He needs to know how much space it will take up when stored.",
+			urlToAOC: "https://adventofcode.com/2015/day/8",
+			uiComponent: Ui_2015_08,
 		},
 	},
 };
